@@ -4,16 +4,17 @@ import * as d3 from 'd3'
 
 class D3SimpleForceChart extends React.Component {
   componentDidMount() {
+    console.log(this.chartRef.parentNode)
     const containerWidth = this.chartRef.parentElement.offsetWidth
     const data = this.props.data
     const margin = { top: 60, right: 60, bottom: 60, left: 60 }
     const width = containerWidth - margin.left - margin.right
     const height = 700 - margin.top - margin.bottom
-    let chart = d3
+    let chart = d3    // 生存的框架
       .select(this.chartRef)
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
-    let g = chart
+    let g = chart     // 生存的模块
       .append('g')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')') // 设最外包层在总图上的相对位置
     let simulation = d3
@@ -34,16 +35,16 @@ class D3SimpleForceChart extends React.Component {
 
     let z = d3.scaleOrdinal(d3.schemeCategory20) // 通用线条的颜色
 
-    let link = g
-      .append('g') // 画连接线
+    let link = g              // 画连接线样板
+      .append('g')            // 画连接线
       .attr('class', 'links')
       .selectAll('line')
       .data(data.edges)
       .enter()
       .append('line')
 
-    let linkText = g
-      .append('g') // 画连接连上面的关系文字
+    let linkText = g        // 画连接连上面的关系文字
+      .append('g') 
       .attr('class', 'link-text')
       .selectAll('text')
       .data(data.edges)
@@ -53,21 +54,21 @@ class D3SimpleForceChart extends React.Component {
         return d.relation
       })
 
-    let node = g
-      .append('g') // 画圆圈和文字
+    let node = g              // 文字内容加载
+      .append('g')              // 先添加 关系文字
       .attr('class', 'nodes')
       .selectAll('g')
       .data(data.nodes)
-      .enter()
-      .append('g')
+      .enter()              // 完成添加
+      .append('g')          // 画圆圈 文字内容
       .on('mouseover', function(d, i) {
-        //显示连接线上的文字
+        //鼠标移入时   连接线上的文字
         linkText.style('fill-opacity', function(edge) {
           if (edge.source === d || edge.target === d) {
             return 1
           }
         })
-        //连接线加粗
+        //鼠标移入时   连接线加粗
         link
           .style('stroke-width', function(edge) {
             if (edge.source === d || edge.target === d) {
@@ -81,13 +82,13 @@ class D3SimpleForceChart extends React.Component {
           })
       })
       .on('mouseout', function(d, i) {
-        //隐去连接线上的文字
+        //鼠标移出时     连接线上的文字
         linkText.style('fill-opacity', function(edge) {
           if (edge.source === d || edge.target === d) {
             return 0
           }
         })
-        //连接线减粗
+        //鼠标移出时     连接线减粗
         link
           .style('stroke-width', function(edge) {
             if (edge.source === d || edge.target === d) {

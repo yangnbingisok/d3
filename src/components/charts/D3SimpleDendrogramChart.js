@@ -37,7 +37,7 @@ class D3SimpleDendrogramChart extends React.Component {
       .size([height, width])
       .separation(function(a, b) {
         return a.parent === b.parent ? 1 : 2
-      })(d3.hierarchy(data))
+      })(d3.hierarchy(data))   // 创建根节点
 
     let linkLine = d3
       .linkHorizontal() // 连接线创建器
